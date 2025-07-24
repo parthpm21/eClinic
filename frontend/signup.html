@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup</title>
+  <style>
+    body { font-family: Arial; max-width: 400px; margin: auto; padding: 2rem; }
+    input, select, button { display: block; width: 100%; margin: 1rem 0; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Create an Account</h2>
+  <form id="signupForm">
+    <input type="text" id="name" placeholder="Full Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    
+    <!-- Add role selection -->
+    <select id="role" required>
+      <option value="" disabled selected>Select Role</option>
+      <option value="patient">Patient</option>
+      <option value="doctor">Doctor</option>
+    </select>
+    
+    <button type="submit">Signup</button>
+  </form>
+  <div id="message"></div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const role = document.getElementById("role").value;
+
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, role })
+      });
+
+      const data = await res.json();
+      document.getElementById("message").innerText = data.message || "Signup complete";
+    });
+
+    if (data.success) {
+  setTimeout(() => window.location.href = "index.html", 2000);
+}
+
+  </script>
+</body>
+</html>

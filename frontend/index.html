@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Appointment System</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .hidden { display: none; }
+    .container {
+      max-width: 400px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: #f7f7f7;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-family: Arial, sans-serif;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .form-toggle {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .form-toggle button {
+      width: 48%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .form-toggle button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Doctor Appointment Booking</h1>
+    
+    <div class="form-toggle">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showSignup()">Signup</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="form" onsubmit="return loginUser(event)">
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" id="loginEmail" required />
+      <input type="password" placeholder="Password" id="loginPassword" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="form hidden" onsubmit="return signupUser(event)">
+      <h2>Signup</h2>
+      <input type="text" placeholder="Name" id="signupName" required />
+      <input type="email" placeholder="Email" id="signupEmail" required />
+      <input type="password" placeholder="Password" id="signupPassword" required />
+      <select id="signupRole" required>
+        <option value="" disabled selected>Select Role</option>
+        <option value="patient">Patient</option>
+        <option value="doctor">Doctor</option>
+      </select>
+      <button type="submit">Signup</button>
+    </form>
+  </div>
+
+  <script>
+    function showLogin() {
+      document.getElementById("loginForm").classList.remove("hidden");
+      document.getElementById("signupForm").classList.add("hidden");
+    }
+
+    function showSignup() {
+      document.getElementById("signupForm").classList.remove("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+    }
+
+    async function loginUser(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      console.log("Login Response:", data);
+
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        alert("Login successful!");
+        window.location.href = "dashboard.html"; // ✅ Redirect to dashboard
+      } else {
+        alert("Login failed: " + data.message);
+      }
+    }
+
+    async function signupUser(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("signupName").value;
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      const role = document.getElementById("signupRole").value;
+
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, role }),
+      });
+
+      const data = await res.json();
+      console.log("Signup Response:", data);
+
+      if (data.success) {
+        alert("Signup successful! Please log in.");
+        showLogin();
+      } else {
+        alert("Signup failed: " + data.message);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Appointments</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: auto; padding: 2rem; }
+    .card {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      background: #f9f9f9;
+    }
+    .title { font-size: 18px; font-weight: bold; }
+    .info { margin: 5px 0; color: #333; }
+  </style>
+</head>
+<body>
+  <h2>Booked Appointments</h2>
+  <div id="appointments">Loading...</div>
+
+  <script>
+  async function fetchAppointments() {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("http://localhost:5000/api/appointments/my", {
+      headers: {
+        "Authorization": token
+      }
+    });
+
+    const data = await res.json();
+    const list = document.getElementById("appointments");
+    list.innerHTML = "";
+
+    if (data.success) {
+      data.appointments.forEach(app => {
+        const li = document.createElement("li");
+        li.innerText = `Dr. ${app.doctorId.name} on ${app.appointmentDate} at ${app.appointmentTime}`;
+        list.appendChild(li);
+      });
+    } else {
+      list.innerHTML = "<li>Failed to load appointments</li>";
+    }
+  }
+
+  fetchAppointments();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Doctor</title>
+  <style>
+    body { font-family: Arial; max-width: 500px; margin: auto; padding: 2rem; }
+    input, button { display: block; margin-bottom: 1rem; width: 100%; padding: 10px; }
+    label { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h2>Add Doctor</h2>
+  <form id="doctorForm">
+    <input type="text" id="name" placeholder="Doctor's Name" required />
+    <input type="text" id="specialty" placeholder="Specialty" required />
+    <input type="text" id="days" placeholder="Available Days (comma separated)" required />
+    <input type="text" id="time" placeholder="Available Time (e.g., 10AM - 5PM)" required />
+    <button type="submit">Add Doctor</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById("doctorForm");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const specialty = document.getElementById("specialty").value;
+      const days = document.getElementById("days").value.split(",").map(day => day.trim());
+      const time = document.getElementById("time").value;
+
+      const response = await fetch("http://localhost:5000/api/doctors/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          specialty,
+          availableDays: days,
+          availableTime: time
+        })
+      });
+
+      const data = await response.json();
+      document.getElementById("result").innerText = data.message || "Error occurred.";
+    });
+  </script>
+</body>
+</html>

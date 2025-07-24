@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Availability</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; max-width: 600px; margin: auto; background: #f4f4f4; }
+    input, button { width: 100%; padding: 10px; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h2>Set Your Availability</h2>
+  <form id="availabilityForm">
+    <label for="availableDays">Available Days (e.g., Monday, Wednesday)</label>
+    <input type="text" id="availableDays" required />
+
+    <label for="availableTime">Available Time (e.g., 10:00 AM - 4:00 PM)</label>
+    <input type="text" id="availableTime" required />
+
+    <button type="submit">Update Availability</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("availabilityForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/api/doctors/availability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token
+        },
+        body: JSON.stringify({
+          availableDays: document.getElementById("availableDays").value,
+          availableTime: document.getElementById("availableTime").value
+        })
+      });
+
+      const data = await res.json();
+      document.getElementById("result").innerText = data.message || "Updated successfully!";
+    });
+  </script>
+</body>
+</html>
