@@ -80,4 +80,19 @@ router.post("/availability", authMiddleware, async (req, res) => {
   }
 });
 
+// Get appointments assigned to a doctor
+router.get("/doctor", authMiddleware, async (req, res) => {
+  if (req.user.role !== "doctor") {
+    return res.status(403).json({ success: false, message: "Access denied" });
+  }
+
+  try {
+    const appointments = await Appointment.find({ doctorId: req.user.userId }).populate("patientId");
+    res.json({ success: true, appointments });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
 module.exports = router;
