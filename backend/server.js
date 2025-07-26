@@ -10,14 +10,28 @@ const appointmentRoutes = require("./routes/appointment");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Allow Vercel Frontend Access (Replace with your real frontend URL)
-app.use(cors({
-  origin: ["https://apna-clinic-phi.vercel.app"], // 🔁 Add more if needed
-  credentials: true
-}));
+const allowedOrigins = ["https://apna-clinic-phi.vercel.app"];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin like mobile apps or curl
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 
 // ✅ Parse incoming JSON requests
 app.use(express.json());
+
+console.log("Mongo URI:", process.env.MONGO_URI);
+
 
 // ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
