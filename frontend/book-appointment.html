@@ -24,7 +24,7 @@
 <script>
   // Load doctor list
   async function loadDoctors() {
-    const res = await fetch("http://localhost:5000/api/doctors/all");
+    const res = await fetch("http://doctor-backend-abwc.onrender.com/api/doctors/all");
     const data = await res.json();
     const select = document.getElementById("doctorSelect");
     select.innerHTML = "";

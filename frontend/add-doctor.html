@@ -32,7 +32,7 @@
       const days = document.getElementById("days").value.split(",").map(day => day.trim());
       const time = document.getElementById("time").value;
 
-      const response = await fetch("http://localhost:5000/api/doctors/add", {
+      const response = await fetch("http://doctor-backend-abwc.onrender.com/api/doctors/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

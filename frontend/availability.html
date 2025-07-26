@@ -26,7 +26,7 @@
       e.preventDefault();
 
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/doctors/availability", {
+      const res = await fetch("http://doctor-backend-abwc.onrender.com/api/doctors/availability", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
