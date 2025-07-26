@@ -10,7 +10,10 @@ const appointmentRoutes = require("./routes/appointment");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = ["https://apna-clinic-phi.vercel.app"];
+const allowedOrigins = [
+  "https://apna-clinic-phi.vercel.app",
+  "https://apna-clinic-k38wmj95p-parthpm21s-projects.vercel.app"
+];
 
 app.use(
   cors({
