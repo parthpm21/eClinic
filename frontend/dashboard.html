@@ -63,11 +63,7 @@
 
   <script>
     const role = localStorage.getItem("role");
-
-    if (!role) {
-      alert("Please login first.");
-      window.location.href = "index.html";
-    }
+    console.log("Detected role:", role);
 
     const options = {
       patient: [
@@ -79,6 +75,12 @@
         { title: "Update Availability", link: "availability.html" }
       ]
     };
+
+    // Redirect to login if role is missing or invalid
+    if (!role || !options[role]) {
+      alert("Role missing or invalid. Please login again.");
+      window.location.href = "index.html"; // or "login.html"
+    }
 
     const container = document.getElementById("options");
 
@@ -92,7 +94,7 @@
 
     function logout() {
       localStorage.clear();
-      window.location.href = "login.html";
+      window.location.href = "index.html"; // or "login.html"
     }
   </script>
 </body>
