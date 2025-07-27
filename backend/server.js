@@ -43,6 +43,11 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.error("DB error:", err));
 
+app.use((req, res, next) => {
+  console.log("Request Origin:", req.headers.origin);
+  next();
+});
+
 // ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
