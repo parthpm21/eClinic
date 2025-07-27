@@ -15,31 +15,30 @@ const allowedOrigins = [
   "https://apna-clinic-k38wmj95p-parthpm21s-projects.vercel.app"
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin like mobile apps or curl
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+// ✅ CORS middleware
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
+// ✅ Preflight handling
+app.options("*", cors());
 
-// ✅ Parse incoming JSON requests
+// ✅ JSON parser
 app.use(express.json());
 
 console.log("Mongo URI:", process.env.MONGO_URI);
 
-
-// ✅ Connect to MongoDB
+// ✅ DB connect
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 })
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.error("DB error:", err));
@@ -49,12 +48,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 
-// ✅ Fallback (optional)
+// ✅ Root route
 app.get("/", (req, res) => {
   res.send("Doctor Appointment Backend is running.");
 });
 
-// ✅ Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
