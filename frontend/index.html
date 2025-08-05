@@ -94,7 +94,7 @@
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
 
-      const res = await fetch("https://your-backend-abwc.onrender.com/api/auth/login", {
+      const res = await fetch("https://doctor-backend-abwc.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -121,7 +121,7 @@
       const password = document.getElementById("signupPassword").value;
       const role = document.getElementById("signupRole").value;
 
-      const res = await fetch("https://your-backend-abwc.onrender.com/api/auth/signup", {
+      const res = await fetch("https://doctor-backend-abwc.onrender.com/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role }),
